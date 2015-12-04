@@ -21,8 +21,8 @@ namespace KokotoreOneOne
         public Form1()
         {
             InitializeComponent();
-             bmp = new Bitmap(Screen.PrimaryScreen.Bounds.Width,
-Screen.PrimaryScreen.Bounds.Height);
+            bmp = new Bitmap(Screen.PrimaryScreen.Bounds.Width,
+            Screen.PrimaryScreen.Bounds.Height);
             Graphics g = Graphics.FromImage(bmp);
             g.CopyFromScreen(new Point(0, 0), new Point(0, 0), bmp.Size);
             g.Dispose();
@@ -36,7 +36,7 @@ Screen.PrimaryScreen.Bounds.Height);
         {
             this.FormBorderStyle = FormBorderStyle.None;
             this.WindowState = FormWindowState.Maximized;
-
+            pictureBox1.Cursor = System.Windows.Forms.Cursors.Cross;
 
             //表示
             pictureBox1.Image = bmp;
@@ -93,21 +93,25 @@ Screen.PrimaryScreen.Bounds.Height);
         /// <param name="e"></param>
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
+            Graphics g = Graphics.FromImage(screenBmp);
+            g.DrawImage(bmp, 0, 0);
+            this.drawRect.set(startX, startY, e.X, e.Y);
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+
             if (startX > 0)
             {
-                Graphics g = Graphics.FromImage(screenBmp);
-                g.DrawImage(bmp, 0, 0);
-                this.drawRect.set(startX, startY, e.X, e.Y);
-
-         
                 g.DrawRectangle(pen, this.drawRect.left, this.drawRect.top, this.drawRect.width, this.drawRect.height);
-                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-                g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
 
                 g.DrawString((e.X - startX) + "," + (e.Y - startY), font,Brushes.Gray, e.X, e.Y);
-                pictureBox1.Image = screenBmp;
-                    
+
             }
+            else
+            {
+                g.DrawString((e.X) + "," + (e.Y ), font, Brushes.Gray, e.X, e.Y);
+
+            }
+            pictureBox1.Image = screenBmp;
         }
 
         /// <summary>
